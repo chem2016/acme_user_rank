@@ -4,6 +4,7 @@ import Home from './Home'
 import Users from './Users'
 import axios from 'axios'
 import Nav from './Nav'
+import UserForm from './UserForm';
 
 class App extends Component{
     constructor(){
@@ -23,21 +24,29 @@ class App extends Component{
             .catch(err=>console.log(err))
     }
 
+    addUser=(user)=>{
+        this.setState( prevState => ({
+            ...prevState,
+            users: [...prevState.users, user]
+        }))
+    }
+
     componentDidMount(){
         this.load()
     }
-
 
     render(){
         const users = this.state.users;
         return(
             <Router>
-                <Fragment>
                 <h1>Acme Users With Ranks</h1>
                 <Route render={({location})=><Nav location={location}/>}/>
                 <Route exact path='/' render={()=><Home />}/>
                 <Route exact path='/users' render={()=><Users users={users}/>}/>
-                </Fragment>
+                <Switch>
+                    {/* {comments: history, location, match are the commonly used three params u need to pass to the render method, if we were using component=<someform />, the history and location are passed automatical by props. however, render method break this connnection, you need to pass history as a params, so you someForm can access it} */}
+                    <Route exact path='/users/create' render={ ({history})=><UserForm history={history} addUser={this.addUser} />}/>
+                </Switch>
             </Router>
         )
         
