@@ -17,7 +17,7 @@ app.get('/api/users', (req, res, next)=>{
         .catch(next)
 })
 
-app.post('/api/users', (req, res, next)=>{
+app.post('/api/users/create', (req, res, next)=>{
     const user = req.body
     User.create(user)
         .then(user=>res.send(user))

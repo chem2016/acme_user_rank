@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import axios from 'axios';
 
 class UserForm extends Component{
     constructor(props){
@@ -22,12 +21,11 @@ class UserForm extends Component{
 
     onSave = (ev) =>{
         ev.preventDefault()
-        console.log('in function onSave')
-        const {name, bio, rank} = this.state
-        axios.post('/api/users', {name, bio, rank})
-            .then(res=>res.data)
-            .then(user=>{
-                this.props.addUser(user)
+        const user = this.state  
+        console.log('in function onSave: ', user)
+        this.props.createUser(user)
+            .then((user)=>{
+                console.log('add user: ', user)
                 this.props.history.push('/users')
             })
             .catch(ex=>console.log(ex))
