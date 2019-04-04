@@ -70,4 +70,4 @@ app.use((error, req, res, next)=>{
 
 syncAndSeed();
 
-app.listen(port, ()=> console.log(`listening on port ${port}`))
+app.listen(port, ()=> console.log(`listening on the port ${port}`))

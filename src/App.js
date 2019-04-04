@@ -5,7 +5,7 @@ import Users from './Users'
 import axios from 'axios'
 import Nav from './Nav'
 import UserForm from './UserForm';
-import { fetchUsers, createUser } from './store'
+import { fetchUsers, createUser, deleteUserThunk } from './store'
 import { connect } from 'react-redux'
 
 class App extends Component{
@@ -21,13 +21,7 @@ class App extends Component{
             .then(()=>{console.log('this.props.fetchUsers', this.props.fetchUsers)})
             .catch(ex=>console.log(ex))
     }
-
-    // componentDidUpdate(){
-    //     this.props.createUser()
-    // }
-
-
-
+    
     render(){
         let {users} = this.props;
         if(!users.length){
@@ -39,7 +33,7 @@ class App extends Component{
                 <h1>Acme Users With Ranks</h1>
                 <Route render={({location})=><Nav location={location}/>}/>
                 <Route exact path='/' render={()=><Home />}/>
-                <Route exact path='/users' render={()=><Users users={users}/>}/>
+                <Route exact path='/users' render={()=><Users users={users} deleteUser={id=>this.props.deleteUser(id)}/>}/>
                 <Switch>
                     {/* {comments: history, location, match are the commonly used three params u need to pass to the render method, if we were using component=<someform />, the history and location are passed automatical by props. however, render method break this connnection, you need to pass history as a params, so you someForm can access it} */}
                     <Route exact path='/users/create' render={ ({history})=><UserForm history={history} createUser={this.props.createUser} />}/>
@@ -54,7 +48,8 @@ class App extends Component{
 const mapDispatchToProps = ( dispatch)=> {
     return {
       fetchUsers: (users)=> dispatch(fetchUsers()),
-      createUser: (user)=> dispatch(createUser(user))
+      createUser: (user)=> dispatch(createUser(user)),
+      deleteUser: (id) =>dispatch(deleteUserThunk(id))
     };
   };
   

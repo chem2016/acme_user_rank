@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const SET_USERS = 'SET_USERS'
 const ADD_USER = 'ADD_USER'
+const DELETE_USER = 'DELETE_USER'
 // const initialState = { users: [] } ?? HY
 
 // const reducer = (state=initialState, action) =>{
@@ -37,10 +38,17 @@ const setUsers = (data) => {
     }
 }
 
-const addUser = (user) => {
+// const addUser = (user) => {
+//     return {
+//         type: ADD_USER,
+//         user
+//     }
+// }
+
+const deleteUser = (id) => {
     return {
-        type: ADD_USER,
-        user
+        type: DELETE_USER,
+        id,
     }
 }
 
@@ -55,12 +63,37 @@ const createUser = (user) => {
             })
             .then((res)=>res.data)
             .then(users => {
-                console.log('in fetchUsers users: ', users)
-                console.log('setUsers(users): ', setUsers(users))
                 dispatch(setUsers(users))
             })
+            .catch(ex=>console.log(ex))
     }
 }
+
+const deleteUserThunk = (id) => {
+    return (dispatch) => {
+        return axios.delete(`/api/users/${id}`)
+            .then(()=>{
+                dispatch(deleteUser(id))
+            })
+            .catch(ex=>console.log(ex))
+    }
+}
+
+
+// const deleteUser = (id) => {
+//     return (dispatch) => {
+//         return axios.delete(`/api/users/${id}`)
+//             .then(()=>{
+//                 console.log(`user ${id} delete`)
+//                 return axios.get('/api/users')
+//             })
+//             .then((res)=>res.data)
+//             .then(users => {
+//                 dispatch(setUsers(users))
+//             })
+//     }
+// }
+
 
 const fetchUsers = () => {
     return (dispatch) => {
@@ -77,4 +110,4 @@ const fetchUsers = () => {
 const store = createStore(reducer, applyMiddleware(thunk))
 
 export default store
-export { setUsers, fetchUsers, createUser }
+export { setUsers, fetchUsers, createUser, deleteUserThunk }
