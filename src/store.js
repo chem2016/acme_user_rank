@@ -6,18 +6,6 @@ import axios from 'axios';
 const SET_USERS = 'SET_USERS'
 const ADD_USER = 'ADD_USER'
 const DELETE_USER = 'DELETE_USER'
-// const initialState = { users: [] } ?? HY
-
-// const reducer = (state=initialState, action) =>{
-//     switch(action.type){
-//         case SET_USERS:
-//             return {...state, users: action.data}
-//         default:
-//             return state
-//     }
-// }
-
-
 
 const reducer = (state=[], action)=> {
       switch(action.type){
@@ -38,12 +26,12 @@ const setUsers = (data) => {
     }
 }
 
-// const addUser = (user) => {
-//     return {
-//         type: ADD_USER,
-//         user
-//     }
-// }
+const addUser = (user) => {
+    return {
+        type: ADD_USER,
+        user
+    }
+}
 
 const deleteUser = (id) => {
     return {
@@ -52,23 +40,15 @@ const deleteUser = (id) => {
     }
 }
 
-const createUser = (user) => {
+const createUserThunk = (user) => {
     return (dispatch) => {
         return axios.post('/api/users/create', user)
-            .then(res => res.data)
-            .then(user => {
-                console.log('in addUser user: ', user)
-                // dispatch(addUser(user))
-                return axios.get('/api/users')
-            })
-            .then((res)=>res.data)
-            .then(users => {
-                dispatch(setUsers(users))
+            .then(()=>{
+                dispatch(addUser(user))
             })
             .catch(ex=>console.log(ex))
     }
 }
-
 const deleteUserThunk = (id) => {
     return (dispatch) => {
         return axios.delete(`/api/users/${id}`)
@@ -78,23 +58,6 @@ const deleteUserThunk = (id) => {
             .catch(ex=>console.log(ex))
     }
 }
-
-
-// const deleteUser = (id) => {
-//     return (dispatch) => {
-//         return axios.delete(`/api/users/${id}`)
-//             .then(()=>{
-//                 console.log(`user ${id} delete`)
-//                 return axios.get('/api/users')
-//             })
-//             .then((res)=>res.data)
-//             .then(users => {
-//                 dispatch(setUsers(users))
-//             })
-//     }
-// }
-
-
 const fetchUsers = () => {
     return (dispatch) => {
         return axios.get('/api/users')
@@ -110,4 +73,44 @@ const fetchUsers = () => {
 const store = createStore(reducer, applyMiddleware(thunk))
 
 export default store
-export { setUsers, fetchUsers, createUser, deleteUserThunk }
+export { setUsers, fetchUsers, createUserThunk, deleteUserThunk }
+
+
+
+//? HY question, single source of truth
+// const deleteUser = (id) => {
+//     return (dispatch) => {
+//         return axios.delete(`/api/users/${id}`)
+//             .then(()=>{
+//                 console.log(`user ${id} delete`)
+//                 return axios.get('/api/users')
+//             })
+//             .then((res)=>res.data)
+//             .then(users => {
+//                 dispatch(setUsers(users))
+//             })
+//     }
+// }
+
+
+// const initialState = { users: [] } ?? HY
+
+// const reducer = (state=initialState, action) =>{
+//     switch(action.type){
+//         case SET_USERS:
+//             return {...state, users: action.data}
+//         default:
+//             return state
+//     }
+// }
+// single source of truth
+// .then(res => res.data)
+            // .then(user => {
+            //     console.log('in addUser user: ', user)
+            //     // dispatch(addUser(user))
+            //     return axios.get('/api/users')
+            // })
+            // .then((res)=>res.data)
+            // .then(users => {
+            //     dispatch(setUsers(users))
+            // })

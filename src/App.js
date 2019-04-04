@@ -5,7 +5,7 @@ import Users from './Users'
 import axios from 'axios'
 import Nav from './Nav'
 import UserForm from './UserForm';
-import { fetchUsers, createUser, deleteUserThunk } from './store'
+import { fetchUsers, createUserThunk, deleteUserThunk } from './store'
 import { connect } from 'react-redux'
 
 class App extends Component{
@@ -21,7 +21,7 @@ class App extends Component{
             .then(()=>{console.log('this.props.fetchUsers', this.props.fetchUsers)})
             .catch(ex=>console.log(ex))
     }
-    
+
     render(){
         let {users} = this.props;
         if(!users.length){
@@ -47,8 +47,8 @@ class App extends Component{
 
 const mapDispatchToProps = ( dispatch)=> {
     return {
-      fetchUsers: (users)=> dispatch(fetchUsers()),
-      createUser: (user)=> dispatch(createUser(user)),
+      fetchUsers: ()=> dispatch(fetchUsers()),
+      createUser: (user)=> dispatch(createUserThunk(user)),
       deleteUser: (id) =>dispatch(deleteUserThunk(id))
     };
   };

@@ -5,7 +5,7 @@ export default ({users, deleteUser})=>{
     return(
         <ul>
             {users.map((user)=>{
-                return <li key={user.id}>
+                return <li key={user.id + user.name}>
                 {user.name}<br/>
                 {user.bio}<br/>
                 {user.rank}<br/>
